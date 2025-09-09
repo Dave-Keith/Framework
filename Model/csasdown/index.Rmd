@@ -152,6 +152,7 @@ for(fun in funs)
 }
 # A not rosetta loop
 funs <- c("https://raw.githubusercontent.com/Mar-Scal/Assessment_fns/master/Maps/pectinid_projector_sf.R",
+          "https://raw.githubusercontent.com/Mar-Scal/Assessment_fns/master/Maps/French_west_labeller.R",
           "https://raw.githubusercontent.com/Mar-Scal/Assessment_fns/master/Maps/convert_inla_mesh_to_sf.R"
           )
 # Now run through a quick loop to load each one, just be sure that your working directory is read/write!
@@ -229,7 +230,12 @@ r.spat.bbn.20 <- readRDS(paste0(repo.loc,"Results/BBn/R_",R.size,"_FR_",FR.size,
 # B spatial
 b.spat.bbn.20 <- readRDS(paste0(repo.loc,"Results/BBn/R_",R.size,"_FR_",FR.size,"/BBn_",
                                mod.select,"_model_output_",scenario.20,"_B_spatial.Rds"))
-
+# I screwed up these CRS's
+st_crs(b.spat.bbn.20) <- 32619
+st_crs(F.spat.bbn.20) <- 32619
+st_crs(q.spat.bbn.20) <- 32619
+st_crs(m.spat.bbn.20) <- 32619
+st_crs(r.spat.bbn.20) <- 32619
 # BBn 10 knots....
 Bdiff.bbn.10 <- readRDS(paste0(repo.loc,"Results/BBn/R_",R.size,"_FR_",FR.size,"/BBn_",
                                mod.select,"_model_output_",scenario.10,"_B_differnce.Rds"))
@@ -257,6 +263,17 @@ r.spat.bbn.10 <- readRDS(paste0(repo.loc,"Results/BBn/R_",R.size,"_FR_",FR.size,
 b.spat.bbn.10 <- readRDS(paste0(repo.loc,"Results/BBn/R_",R.size,"_FR_",FR.size,"/BBn_",
                                mod.select,"_model_output_",scenario.10,"_B_spatial.Rds"))
 
+# I screwed up these CRS's
+st_crs(b.spat.bbn.20) <- 32619
+st_crs(F.spat.bbn.20) <- 32619
+st_crs(q.spat.bbn.20) <- 32619
+st_crs(m.spat.bbn.20) <- 32619
+st_crs(r.spat.bbn.20) <- 32619
+st_crs(b.spat.bbn.10) <- 32619
+st_crs(F.spat.bbn.10) <- 32619
+st_crs(q.spat.bbn.10) <- 32619
+st_crs(m.spat.bbn.10) <- 32619
+st_crs(r.spat.bbn.10) <- 32619
 ##########Sab Processes SEAM 
 # Sab 20
 Bdiff.sab.20 <- readRDS(paste0(repo.loc,"Results/Sab/R_",R.size,"_FR_",FR.size,"/Sab_",

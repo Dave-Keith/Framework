@@ -38,3 +38,6 @@ coda
 rjags
 R2jags
 rgdal
+usethis
+devtools
+MetricsCOSEWIC

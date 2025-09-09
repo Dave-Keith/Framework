@@ -30,21 +30,21 @@ options(tinytex.verbose = TRUE)
 
 ```{r sfa-25a-knot-fig, echo=F, fig.cap="SFA 25A knot locations used for SEAM (10 knots); the colors are used to help visually delineate the knots."}
 if(language== 'english') knitr::include_graphics(paste0(repo.loc,"Figures/Sab_knots_fig_10_knots.png"))
-if(language== 'french') knitr::include_graphics(paste0(repo.loc,"Figures/Sab_knots_fig_10_knots.png"))
+if(language== 'french') knitr::include_graphics(paste0(repo.loc,"Figures/Sab_knots_fig_10_knots_french.png"))
 ```
 
 
 \newpage
 ```{r sfa-26a-knot-fig, echo=F, fig.cap="SFA 26A knot locations used for SEAM (20 knots); the colors are used to help visually delineate the knots."}
 if(language== 'english') knitr::include_graphics(paste0(repo.loc,"Figures/BBn_knots_fig_20_knots.png"))
-if(language== 'french') knitr::include_graphics(paste0(repo.loc,"Figures/BBn_knots_fig_20_knots.png"))
+if(language== 'french') knitr::include_graphics(paste0(repo.loc,"Figures/BBn_knots_fig_20_knots_french.png"))
 ```
 
 
 \newpage
 ```{r catch-prior-fig, echo=F, fig.cap="Catchability distribution used for fully-recruited biomass in SEAM and as the catchability prior for BSSM."}
 if(language== 'english') knitr::include_graphics(paste0(repo.loc,"Figures/Catchability_distribution.png"))
-if(language== 'french') knitr::include_graphics(paste0(repo.loc,"Figures/Catchability_distribution_fr.png"))
+if(language== 'french') knitr::include_graphics(paste0(repo.loc,"Figures/Catchability_distribution_french.png"))
 ```
 
 
@@ -316,7 +316,7 @@ if(language== 'french') knitr::include_graphics(paste0(repo.loc,"Figures/BBn/R_"
 <!-- Now for the Process error Figures, starting with SFA 25... -->
 
 \newpage
-```{r sfa-25-bssm-PE-ts-fig, echo=F, out.width = "30%",fig.cap="SFA 25A BSSM annual process error, upper panel is raw (log scale) and lower panel is standardized."}
+```{r sfa-25-bssm-PE-ts-fig, echo=F, fig.cap="SFA 25A BSSM annual process error, upper panel is raw (log scale) and lower panel is standardized."}
 if(language== 'english') knitr::include_graphics(paste0(repo.loc,"Figures/Sab/R_",R.size,"_FR_",FR.size,"/SSmodel/English/Sab_bssm_process_error.png"))
 if(language== 'french') knitr::include_graphics(paste0(repo.loc,"Figures/Sab/R_",R.size,"_FR_",FR.size,"/SSmodel/French/Sab_bssm_process_error.png"))
 ```
@@ -353,7 +353,7 @@ if(language== 'french') knitr::include_graphics(paste0(repo.loc,"Figures/Sab/R_"
 <!-- Now SFA 26 Process error-->
 
 \newpage
-```{r sfa-26-bssm-PE-ts-fig, echo=F, out.width = "30%",fig.cap="SFA 26A BSSM annual process error, upper panel is raw (log scale) and lower panel is standardized."}
+```{r sfa-26-bssm-PE-ts-fig, echo=F, fig.cap="SFA 26A BSSM annual process error, upper panel is raw (log scale) and lower panel is standardized."}
 if(language== 'english') knitr::include_graphics(paste0(repo.loc,"Figures/BBn/R_",R.size,"_FR_",FR.size,"/SSmodel/English/BBn_bssm_process_error.png"))
 if(language== 'french') knitr::include_graphics(paste0(repo.loc,"Figures/BBn/R_",R.size,"_FR_",FR.size,"/SSmodel/French/BBn_bssm_process_error.png"))
 ```
