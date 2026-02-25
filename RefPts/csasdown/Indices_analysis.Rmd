@@ -336,11 +336,26 @@ plt.27b.bmi.ts <- ggplot(surv.27b) + geom_line(aes(x=year,y=I)) + #geom_point(ae
                               scale_y_continuous(name = "",limits=c(0,6000))
 
 # We can make these a nice 4 by 4 plot...
-plt.bmi.ts <- plot_grid(plt.25a.bmi.ts,plt.26a.bmi.ts,plt.26c.bmi.ts,plt.27b.bmi.ts,ncol=2,labels = c("SFA 25A","SFA 26A","SFA 26C","SFA 27B"),label_size=14,label_y=0.95,label_x=0.15) + theme(plot.margin = margin(0, 0, -275, 0))
+if(language == 'english')
+  plt.bmi.ts <- plot_grid(plt.25a.bmi.ts,plt.26a.bmi.ts,plt.26c.bmi.ts,plt.27b.bmi.ts,ncol=2,
+              labels = c("SFA 25A","SFA 26A","SFA 26C","SFA 27B"),label_size=14,label_y=0.95,label_x=0.15) + 
+              theme(plot.margin = margin(0, 0, -275, 0))
 
-plt.bmi.ts <- add_sub(plt.bmi.ts, "Survey Biomass Index (tonnes)",angle=90,y=2.25,x=0.01,size=18)
+  plt.bmi.ts <- add_sub(plt.bmi.ts, "Survey Biomass Index (tonnes)",angle=90,y=2.25,x=0.01,size=18)
+} #end english
+
+if(language == 'french')
+{
+  plt.bmi.ts <- plot_grid(plt.25a.bmi.ts,plt.26a.bmi.ts,plt.26c.bmi.ts,plt.27b.bmi.ts,ncol=2,
+              labels = c("ZPP 25A","ZPP 26A","ZPP 26C","ZPP 27B"),label_size=14,label_y=0.95,label_x=0.15) + 
+              theme(plot.margin = margin(0, 0, -275, 0))
+
+  plt.bmi.ts <- add_sub(plt.bmi.ts, "Indice de la biomasse des relevés (tonnes)",angle=90,y=1.75,x=0.01,size=18)
+  
+}
 plt.bmi.ts <- ggdraw(plt.bmi.ts)
 save_plot(plt.bmi.ts,file =paste0(plot.index.loc,"RPs_BM_Indices.png"),base_height = 8,base_width = 11)
+
 
 
 
@@ -366,10 +381,25 @@ plt.27b.kobe.indx <-  ggplot(rf.27b,aes(y=relative.F,x=I)) +  geom_text(aes(labe
                                                               scale_x_continuous(name="",limits = c(0,NA)) 
 
 
-plt.bmi.kobe <- plot_grid(plt.25a.kobe.indx,plt.26a.kobe.indx,plt.26c.kobe.indx,plt.27b.kobe.indx,ncol=2,labels = c("SFA 25A","SFA 26A","SFA 26C","SFA 27B"),label_size=14,label_y=0.95,label_x=0.15) + theme(plot.margin = margin(0, 0, -200, 0))
+if(language == 'english')
+{
+  plt.bmi.kobe <- plot_grid(plt.25a.kobe.indx,plt.26a.kobe.indx,plt.26c.kobe.indx,plt.27b.kobe.indx,ncol=2,
+                            labels = c("SFA 25A","SFA 26A","SFA 26C","SFA 27B"),label_size=14,label_y=0.95,label_x=0.15) + 
+                            theme(plot.margin = margin(0, 0, -200, 0))
 
 plt.bmi.kobe <- add_sub(plt.bmi.kobe, "Survey Biomass Index (tonnes)",angle=0,y=1.25,x=0.55,size=18)
 plt.bmi.kobe <- add_sub(plt.bmi.kobe, "Relative exploitation rate",angle=90,y=2.5,x=0.01,size=18)
+}
+
+if(language == 'french')
+{
+  plt.bmi.kobe <- plot_grid(plt.25a.kobe.indx,plt.26a.kobe.indx,plt.26c.kobe.indx,plt.27b.kobe.indx,ncol=2,
+                            labels = c("ZPP 25A","ZPP 26A","ZPP 26C","ZPP 27B"),label_size=14,label_y=0.95,label_x=0.15) + 
+                            theme(plot.margin = margin(0, 0, -200, 0))
+
+plt.bmi.kobe <- add_sub(plt.bmi.kobe, "Indice de la biomasse des relevés (tonnes)",angle=0,y=1.25,x=0.55,size=18)
+plt.bmi.kobe <- add_sub(plt.bmi.kobe, "Taux d’exploitation relatif",angle=90,y=2.5,x=0.01,size=18)
+}
 
 #plt.bmi.ts <- ggdraw(plt.bmi.ts)
 save_plot(plt.bmi.kobe,file =paste0(plot.index.loc,"Kobe_BM_Indices.png"),base_height = 8,base_width = 11)
@@ -405,12 +435,25 @@ plt.27b.gem.indx <- ggplot(rf.27b,aes(x=relative.F,y=prop.DB)) +  geom_text(aes(
                                                                   scale_x_continuous(name="",limits=c(0,NA)) +
                                                                   scale_y_continuous(name="") 
 
+if(language == 'english')
+{
+  plt.bmi.gem <- plot_grid(plt.25a.gem.indx,plt.26a.gem.indx,plt.26c.gem.indx,plt.27b.gem.indx,ncol=2,
+                           labels = c("SFA 25A","SFA 26A","SFA 26C","SFA 27B"),label_size=14,label_y=0.93,label_x=0.12) + 
+                           theme(plot.margin = margin(0, 0, -270, 0))
 
-plt.bmi.gem <- plot_grid(plt.25a.gem.indx,plt.26a.gem.indx,plt.26c.gem.indx,plt.27b.gem.indx,ncol=2,labels = c("SFA 25A","SFA 26A","SFA 26C","SFA 27B"),label_size=14,label_y=0.93,label_x=0.12) + theme(plot.margin = margin(0, 0, -270, 0))
+  plt.bmi.gem <- add_sub(plt.bmi.gem, "Relative exploitation rate",angle=0,y=1.25,x=0.55,size=18)
+  plt.bmi.gem <- add_sub(plt.bmi.gem, "Change in survey biomass Index (%)",angle=90,y=2,x=0.01,size=18)
+}
 
-plt.bmi.gem <- add_sub(plt.bmi.gem, "Relative exploitation rate",angle=0,y=1.25,x=0.55,size=18)
-plt.bmi.gem <- add_sub(plt.bmi.gem, "Change in survey biomass Index (%)",angle=90,y=2,x=0.01,size=18)
+if(language == 'french')
+{
+  plt.bmi.gem <- plot_grid(plt.25a.gem.indx,plt.26a.gem.indx,plt.26c.gem.indx,plt.27b.gem.indx,ncol=2,
+                           labels = c("ZPP 25A","ZPP 26A","ZPP 26C","ZPP 27B"),label_size=14,label_y=0.93,label_x=0.12) + 
+                           theme(plot.margin = margin(0, 0, -270, 15))
 
+  plt.bmi.gem <- add_sub(plt.bmi.gem, "Taux d’exploitation relatif",angle=0,y=1.25,x=0.55,size=18)
+  plt.bmi.gem <- add_sub(plt.bmi.gem, "Changement de l’indice de la \nbiomasse des relevés (%)",angle=90,y=2.25,x=0.01,size=18)
+}
 #plt.bmi.ts <- ggdraw(plt.bmi.ts)
 save_plot(plt.bmi.gem,file =paste0(plot.index.loc,"GEM_BM_Indices.png"),base_height = 8,base_width = 11)
 
@@ -438,10 +481,25 @@ plt.27b.bmi.lrp <- ggplot(surv.27b) + geom_line(aes(x=year,y=I)) + #geom_point(a
                               scale_y_continuous(name = "",limits=c(0,6000))
 
 # We can make these a nice 2 x 1 plot now...
-plt.bmi.lrp <- plot_grid(plt.26c.bmi.lrp,plt.27b.bmi.lrp,ncol=2,labels = c("SFA 26C","SFA 27B"),label_size=14,label_y=0.95,label_x=0.15) + theme(plot.margin = margin(0, 0, -275, 0))
+if(language == 'english')
+{
+  plt.bmi.lrp <- plot_grid(plt.26c.bmi.lrp,plt.27b.bmi.lrp,ncol=2,labels = c("SFA 26C","SFA 27B"),
+                          label_size=14,label_y=0.95,label_x=0.15) + theme(plot.margin = margin(0, 0, -275, 0))
 
-plt.bmi.lrp <- add_sub(plt.bmi.lrp, "Survey Biomass Index (tonnes)",angle=90,y=2.25,x=0.01,size=18)
-plt.bmi.lrp <- ggdraw(plt.bmi.lrp)
+  plt.bmi.lrp <- add_sub(plt.bmi.lrp, "Survey Biomass Index (tonnes)",angle=90,y=2.25,x=0.01,size=18)
+  plt.bmi.lrp <- ggdraw(plt.bmi.lrp)
+}
+
+if(language == 'french')
+{
+  plt.bmi.lrp <- plot_grid(plt.26c.bmi.lrp,plt.27b.bmi.lrp,ncol=2,labels = c("ZPP 26C","ZPP 27B"),
+                          label_size=14,label_y=0.95,label_x=0.15) + theme(plot.margin = margin(0, 0, -275, 0))
+
+  plt.bmi.lrp <- add_sub(plt.bmi.lrp, "Indice de la biomasse des relevés (tonnes)",angle=90,y=1.75,x=0.01,size=18)
+  plt.bmi.lrp <- ggdraw(plt.bmi.lrp)
+}
+
+
 save_plot(plt.bmi.lrp,file =paste0(plot.index.loc,"LRPs_BM_Indices_26C_27B.png"),base_height = 8.5,base_width = 16)
 
 

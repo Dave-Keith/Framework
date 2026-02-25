@@ -33,12 +33,26 @@ save_plot(paste0(sab.plot.loc,"RPS_ts.png"),p.rps.ts,base_height =6,base_width =
 # Breakpoints are
 sab.rps.bp1 <- 4300
 sab.rps.bp2 <- 7000
+
+if(language == 'english')
+{
+  x.lab <- "SSB (tonnes)"
+  y.lab <- "Recruits per Spawner (kg\u00B9\u22C5kg\u207B\u00B9)"
+}
+
+if(language == 'french')
+{
+  x.lab <- "BSR (tonnes)"
+  y.lab <- "Pétoncles recrutés par géniteur (kg\u00B9\u22C5kg\u207B\u00B9)"
+}
+
 p.rps.ssb <- ggplot(sab.prod.dat,aes(y=RPS4,x=SSB)) + geom_text(aes(label = substr(Year,3,4)),size=3) + 
-                                                  xlab("SSB (tonnes)") + ylab("Recruits per Spawner (kg\u00B9\u22C5kg\u207B\u00B9)") +
+                                                  xlab(x.lab) + ylab(y.lab) +
                                                   geom_smooth(method = 'lm') +
                                                   scale_y_log10() + 
                                                   geom_vline(xintercept = c(sab.rps.bp2),size=0.5,color='firebrick2',linetype='dashed')  + 
                                                   scale_x_continuous(breaks = c(seq(1000,20000,by=1000)))# Definitely a signal here
+
 save_plot(paste0(sab.plot.loc,"RPS_vs_SSB.png"),p.rps.ssb,base_height =6,base_width = 10)        
 
 # Recruits vs SSB
@@ -78,14 +92,28 @@ save_plot(paste0(sab.plot.loc,"Rec_vs_SSB.png"),p.rec.ssb,base_height =6,base_wi
 
 
 # No relationship between g and SSB.
+if(language == 'english')
+{
+  x.lab <- "SSB (tonnes)"
+  y.lab1 <-"Growth (Fully Recruited)"
+  y.lab2 <-"Growth (Recruits)"
+}
+
+if(language == 'french')
+{
+  x.lab <- "BSR (tonnes)"
+  y.lab1 <-"Croissance (pétoncles pleinement recrutés)"
+  y.lab2 <-"Croissance (pétoncles recrutés)"
+}
+
 p.g.ssb <- ggplot(sab.prod.dat,aes(y=g,x=SSB)) + geom_text(aes(label = substr(Year,3,4))) +
-                                             xlab("SSB (tonnes)") + ylab("Growth (Fully Recruited)") +
+                                             xlab("") + ylab(y.lab1) +
                                              geom_smooth(method = 'gam',formula = y ~ s(x, bs = "cs", k = 3)) +
                                              #geom_vline(xintercept = 9000,size=0.5,color='firebrick2',linetype='dashed')  + 
                                              scale_x_continuous(breaks = c(seq(1000,20000,by=1000),labels = NA))
 
 p.gR.ssb <- ggplot(sab.prod.dat,aes(y=gR,x=SSB)) + geom_text(aes(label = substr(Year,3,4))) +
-                                             xlab("SSB (tonnes)") + ylab("Growth (Recruits)") +
+                                             xlab(x.lab) + ylab(y.lab2) +
                                              geom_smooth(method = 'gam',formula = y ~ s(x, bs = "cs", k = 3)) +
                                              #geom_vline(xintercept = 9000,size=0.5,color='firebrick2',linetype='dashed')  + 
                                              scale_x_continuous(breaks = c(seq(1000,20000,by=1000)))
@@ -96,14 +124,29 @@ save_plot(paste0(sab.plot.loc,"Growth_vs_SSB.png"),p.gs.ssb,base_height =12,base
 
 # Naturnal mortality and SSB, not really anything IMHO.
 sab.m.bp <- 0
+
+if(language == 'english')
+{
+  x.lab <- "SSB (tonnes)"
+  y.lab1 <-"FR Natural Moratlity (instantaneous)"
+  y.lab2 <-"Recruit Natural Mortality (instantaneous)"
+}
+
+if(language == 'french')
+{
+  x.lab <- "BSR (tonnes)"
+  y.lab1 <-"Mortalité naturelle (instantanée) \ndes pétoncles PR"
+  y.lab2 <-"Mortalité naturelle (instantanée) \ndes pétoncles recrutés"
+}
+
 p.m.ssb <- ggplot(sab.prod.dat,aes(y=m,x=SSB)) + geom_text(aes(label = substr(Year,3,4)))+ 
-                                             xlab("SSB (tonnes)") + ylab("FR Natural Mortality (instantaneous)") +
+                                             xlab("") + ylab(y.lab1) +
                                              geom_smooth(method = 'gam',formula = y ~ s(x, bs = "cs", k = 3)) +
                                              #geom_vline(xintercept = 10000,size=0.5,color='firebrick2',linetype='dashed')  + 
                                              scale_x_continuous(breaks = c(seq(1000,20000,by=1000)),labels=NULL)
 
 p.mr.ssb <- ggplot(sab.prod.dat,aes(y=mr,x=SSB)) + geom_text(aes(label = substr(Year,3,4)))+ 
-                                             xlab("SSB (tonnes)") + ylab("Recruit Natural Mortality (instantaneous)") +
+                                             xlab(x.lab) + ylab(y.lab2) +
                                              geom_smooth(method = 'gam',formula = y ~ s(x, bs = "cs", k = 3)) +
                                              #geom_vline(xintercept = 10000,size=0.5,color='firebrick2',linetype='dashed')  + 
                                              scale_x_continuous(breaks = c(seq(1000,20000,by=1000)))
@@ -131,7 +174,18 @@ save_plot(paste0(sab.plot.loc,"ACF_RPS.png"),p.rps.acf,base_height =6,base_width
 
 # pacf shows us that we could approximate the RPS time series as an AR1, though there is a teaser of the 2 year negative correlation similar to what we found on BBn.
 # could easily enough model as an AR2 and use that. Also a 5 year correlation there, which I think is that longer term cycle.  But ignoring that...
-p.rps.pacf <- ggPacf(na.omit(log(sab.prod.dat$RPS4)),lag.max = 10) + ggtitle("") + ylab("PACF log(RPS)")
+if(language == 'english')
+{
+  x.lab <- "Lag"
+  y.lab <-"PACF log(RPS)"
+}
+
+if(language == 'french')
+{
+  x.lab <- "Décalage"
+  y.lab <-"FACP log(PRG)"
+}
+p.rps.pacf <- ggPacf(na.omit(log(sab.prod.dat$RPS4)),lag.max = 10) + ggtitle("") + ylab(y.lab) + xlab(x.lab)
 # The RPS value for the text and for the sims later
 sab.rps.lag <- 1
 sab.rps.cor.1 <- round(p.rps.pacf$data$Freq[sab.rps.lag],digits=2)
@@ -144,21 +198,54 @@ summary(rps.mod) # Indeed there is...
 
 
 # How about growth, nope nothing.
-p.g.pacf <- ggPacf(sab.prod.dat$g,lag.max = 10) + ggtitle("") + ylab("ACF Growth (FR)")# No autocorrelation in Condition
-p.gR.pacf <- ggPacf(sab.prod.dat$gR,lag.max = 10) + ggtitle("") + ylab("ACF Growth (Recruits)")# No autocorrelation in Condition
+
+if(language == 'english')
+{
+  x.lab <- "Lag"
+  y.lab1 <-"PACF Growth (Recruits)"
+  y.lab2 <-"PACF Growth (FR)"
+
+}
+
+if(language == 'french')
+{
+  x.lab <- "Décalage"
+  y.lab1 <-"FACP, croissance (pétoncles recrutés)"
+  y.lab2 <-"FACP, croissance (pétoncles PR)"
+}
+
+p.g.pacf <- ggPacf(sab.prod.dat$g,lag.max = 10) + ggtitle("") + ylab(y.lab2) + xlab("")# No autocorrelation in Condition
+p.gR.pacf <- ggPacf(sab.prod.dat$gR,lag.max = 10) + ggtitle("") + ylab(y.lab1) + xlab(x.lab)# No autocorrelation in Condition
 p.gs.pacf <-  cowplot::plot_grid(p.g.pacf,p.gR.pacf,nrow=2)
 
 save_plot(paste0(sab.plot.loc,"PACF_growths.png"),p.gs.pacf,base_height =12,base_width = 10)                
 
 # Natural morality correlation? Curious, no correlation at 1 lag, but a negative correlation at lag 2, suggesting the m is flipping every couple years I think?
-p.m.acf <- ggAcf(sab.prod.dat$m,lag.max = 10) + ggtitle("") + ylab("ACF FR Natural Mortality") + xlab("") + scale_x_continuous(breaks = 1:14,labels=NULL) # Not significant
-p.m.pacf <- ggPacf(sab.prod.dat$m,lag.max = 10) + ggtitle("") + ylab("PACF FR Natural Mortality")# Just barely significant
+
+
+if(language == 'english')
+{
+  x.lab <- "Lag"
+  y.lab1 <-"PACF FR Natural Mortality"
+  y.lab2 <-"PACF Recuit Natural Mortality"
+}
+
+if(language == 'french')
+{
+  x.lab <- "Décalage"
+  y.lab1 <-"FACP, mortalité naturelle \ndes pétoncles PR"
+  y.lab2 <-"FACP, mortalité naturelle \ndes pétoncles recrutés"
+}
+
+
+#p.m.acf <- ggAcf(sab.prod.dat$m,lag.max = 10) + ggtitle("") + ylab("ACF FR Natural Mortality") + xlab("") + scale_x_continuous(breaks = 1:14,labels=NULL) # Not significant
+p.m.pacf <- ggPacf(sab.prod.dat$m,lag.max = 10) + ggtitle("") + ylab(y.lab1) + xlab("")# Just barely significant
 sab.m.lag <- 2
 sab.m.cor.2 <- round(p.m.pacf$data$Freq[sab.m.lag],digits=2)
 sab.m.cor.1 <- 0.01 # Make it a very small number if it is 0.
 # Recruit mortality, no autocorrelation.
-p.mr.acf <- ggAcf(sab.prod.dat$mr,lag.max = 10) + ggtitle("") + ylab("ACF Recruit Natural Mortality") + xlab("") + scale_x_continuous(breaks = 1:14,labels=NULL) # No autocorrelation in 
-p.mr.pacf <- ggPacf(sab.prod.dat$mr,lag.max = 10) + ggtitle("") + ylab("PACF Recuit Natural Mortality")# No autocorrelation in Condition
+#p.mr.acf <- ggAcf(sab.prod.dat$mr,lag.max = 10) + ggtitle("") + ylab("ACF Recruit Natural Mortality") + xlab("") + scale_x_continuous(breaks = 1:14,labels=NULL) # No autocorrelation in 
+p.mr.pacf <- ggPacf(sab.prod.dat$mr,lag.max = 10) + ggtitle("") + ylab(y.lab2) + xlab(x.lab)# No autocorrelation in Condition
 
 
 p.m.pacfs <-  cowplot::plot_grid(p.m.pacf,p.mr.pacf,nrow=2)
@@ -175,11 +262,27 @@ sab.prod.dat$RPS4_offset <- c(rep(NA,sab.rec.age),sab.prod.dat$RPS4[-((length(sa
 ggplot(sab.prod.dat,aes(x=Year,y=RPS4)) + geom_point() + geom_line(size=2) + geom_point(aes(y = m)) + geom_line(aes(y = m),color='blue') 
 ggplot(sab.prod.dat,aes(x=m,y=RPS4)) + geom_text(aes(label = substr(Year,3,4))) + geom_smooth(method = 'gam')
 # If we offset the RPS to the year they are actually showing up, might be some weak correlation, but can't say it's anything more than noise, so we can ignore this I think.
+
+if(language == 'english')
+{
+  x.lab <- "Lag"
+  y.lab1 <-"RPS (kg\u00B9\u22C5kg\u207B\u00B9) & Natural mortality (Inst)"
+  y.lab2 <-"CCF"
+}
+
+if(language == 'french')
+{
+  x.lab <- "Décalage"
+  y.lab1 <-"PRG (kg\u00B9\u22C5kg\u207B\u00B9) & Mortalité naturelle (Inst)"
+  y.lab2 <-"FCC"
+}
+
 p.rpsoff.m <- ggplot(sab.prod.dat,aes(x=Year,y=RPS4_offset)) + geom_text(aes(label = substr(Year-4,3,4)))  + 
                                                            xlab("") +
-                                                           ylab("RPS (kg\u00B9\u22C5kg\u207B\u00B9) & Natural mortality (Inst)") +
+                                                           ylab(y.lab1) +
                                                            geom_line(aes(y = m),color='firebrick2',size=1,linetype='dashed')
-p.rps.m.ccf <- ggCcf(sab.prod.dat$RPS4_offset,sab.prod.dat$m,lag.max = 10) + ggtitle("")
+# CCF plot
+p.rps.m.ccf <- ggCcf(sab.prod.dat$RPS4_offset,sab.prod.dat$m,lag.max = 10) + ggtitle("") + xlab(x.lab) + ylab(y.lab2)
 # Peak cross correlation...
 sab.m.rps.lag <- p.rps.m.ccf$data$lag[which(abs(p.rps.m.ccf$data$Freq) == abs(max(p.rps.m.ccf$data$Freq)))]
 sab.m.rps.cor <- round(p.rps.m.ccf$data$Freq[p.rps.m.ccf$data$lag == sab.m.rps.lag],digits=2)
@@ -195,20 +298,23 @@ mod.index.bm
 sab.cor.q.bm <- signif(cor(mod.index.bm$mod.bm , mod.index.bm$index.bm,use= 'complete.obs'),digits=2)
 
 
+if(language == 'english')
+{
+  x.lab <- "Survey Biomass Index (tonnes)"
+  y.lab1 <-"Model Biomass (tonnes)"
+}
+
+if(language == 'french')
+{
+  x.lab <-" Biomasse modélisée (tonnes)"
+  y.lab1 <-"Indice de la biomasse des relevés (tonnes)"
+}
+
 p.sab.mod.ind.bm <-ggplot(mod.index.bm) + geom_text(aes(x=index.bm,y=mod.bm,label = substr(year,3,4))) +
-                                          scale_x_continuous(name="Survey Biomass Index (tonnes)") +
-                                          scale_y_continuous(name="Model Biomass (tonnes)") +
+                                          scale_x_continuous(name=x.lab) +
+                                          scale_y_continuous(name=y.lab1) +
                                           geom_abline(slope=1,intercept=0)
 save_plot(paste0(sab.plot.loc,"Model_vs_index_biomass.png"),p.sab.mod.ind.bm,base_height =6,base_width = 10)   
-
-
-
-
-# PICK IT UP FROM HERE.
-
-
-
-
 
 
 ```
@@ -406,35 +512,53 @@ sab.cor.sim.summary <- data.frame(t(round(colMeans(as.matrix(sab.cor.res)),digit
 # Now I can make the PACF plots for the productivity parameters
 #ggplot(g.sim.pacf,mapping=aes(x=lag,y=dat)) + geom_segment(mapping=aes(xend=lag,yend=0)) + geom_hline(yintercept=0) + scale_y_continuous(name = "Mean Partial Auto-correlation",limits = c(-0.5,0.5))
 # Maximum and minimum for the figure, keep it symmetric...
+if(language == 'english')
+{
+  x.lab <- "Lag"
+  y.lab1 <-"Mean PACF (Fully-recruited M)"
+  y.lab2 <-"Mean PACF (Recruit M)"
+  y.lab3 <-"Mean PACF (Recruit growth)"
+  y.lab4 <-"Mean PACF (RPS)"
+}
+
+if(language == 'french')
+{
+  x.lab <- "Décalage"
+  y.lab1 <-"FACP moyenne \n(M des pétoncles PR)"
+  y.lab2 <-"FACP moyenne (M des pétoncles recrutés)"
+  y.lab3 <-"FACP moyenne \n(croissance des pétoncles recrutés)"
+  y.lab4 <-"FACP moyenne (PRG)"
+}
+
 max.abs <- max(abs(sab.cor.sim.summary),na.rm=T)
 
 sab.m.sim.cor.plt <- ggplot(m.sim.pacf,mapping=aes(x=lag,y=dat)) + geom_segment(mapping=aes(xend=lag,yend=0)) + geom_hline(yintercept=0) + 
-                                              scale_y_continuous(name = "Mean PACF (Fully-recruited M)",limits = c(-max.abs,max.abs)) + 
+                                              scale_y_continuous(name = y.lab1,limits = c(-max.abs,max.abs)) + 
                                               scale_x_continuous(name = "",breaks = 1:max.lag,labels=NULL)
 
 sab.mr.sim.cor.plt <- ggplot(mr.sim.pacf,mapping=aes(x=lag,y=dat)) + geom_segment(mapping=aes(xend=lag,yend=0)) + geom_hline(yintercept=0) + 
-                                              scale_y_continuous(name = "Mean PACF (Recruit M)",limits = c(-max.abs,max.abs))+ 
+                                              scale_y_continuous(name = y.lab2,limits = c(-max.abs,max.abs))+ 
                                               scale_x_continuous(name = "",breaks = 1:max.lag,labels=NULL)
 
 sab.gr.sim.cor.plt <- ggplot(gr.sim.pacf,mapping=aes(x=lag,y=dat)) + geom_segment(mapping=aes(xend=lag,yend=0)) + geom_hline(yintercept=0) + 
-                                               scale_y_continuous(name = "Mean PACF (Recruit growth)",limits = c(-max.abs,max.abs))+ 
-                                               scale_x_continuous(name = "Lag",breaks = 1:max.lag)
+                                               scale_y_continuous(name = y.lab3,limits = c(-max.abs,max.abs))+ 
+                                               scale_x_continuous(name = x.lab,breaks = 1:max.lag)
 
 
 sab.rps.sim.cor.plt <- ggplot(rps.sim.pacf,mapping=aes(x=lag,y=dat)) + geom_segment(mapping=aes(xend=lag,yend=0)) + geom_hline(yintercept=0) + 
-                                                scale_y_continuous(name = "Mean PACF (RPS)",limits = c(-max.abs,max.abs))+ 
-                                                scale_x_continuous(name = "Lag",breaks = 1:max.lag)
-
+                                                scale_y_continuous(name = y.lab4,limits = c(-max.abs,max.abs))+ 
+                                                scale_x_continuous(name = x.lab,breaks = 1:max.lag)
 
 sab.sim.cors.plt <- plot_grid(sab.m.sim.cor.plt,sab.mr.sim.cor.plt,sab.gr.sim.cor.plt,sab.rps.sim.cor.plt)
 
 save_plot(sab.sim.cors.plt,file = paste0(plot.sab.rp.mod.loc,min(sab.model.yrs),"-",max(sab.model.yrs),"/PACF_sim_correlation.png"),base_height = 11,base_width=8.5)
 
-
+if(language == 'english') y.lab <- "Mean CCF (M vs. RPS)"
+if(language == 'french') y.lab <- "FCC moyenne (M vs PRG)"
 
 sab.rps.m.sim.cor.plt <- ggplot(rps.m.sim.ccf,mapping=aes(x=lag,y=dat)) +  geom_segment(mapping=aes(xend=lag,yend=0)) + geom_hline(yintercept=0) + 
-                                                scale_y_continuous(name = "Mean CCF (M vs. RPS)",limits = c(-max.abs,max.abs))+ 
-                                                scale_x_continuous(name = "Lag",breaks = -max.lag:max.lag)
+                                                scale_y_continuous(name = y.lab,limits = c(-max.abs,max.abs))+ 
+                                                scale_x_continuous(name = x.lab,breaks = -max.lag:max.lag)
 
 save_plot(sab.rps.m.sim.cor.plt,file = paste0(plot.sab.rp.mod.loc,min(sab.model.yrs),"-",max(sab.model.yrs),"/CCF_sim_correlation.png"),base_height = 8.5,base_width=8.5)
 
@@ -455,10 +579,30 @@ if(n_sims <= 10) alphs <- 0.5
 if(n_sims > 10) alphs <- 0.1
 if(n_sims > 100) alphs <- 1/255 # This is the minimum you can Alpha
 
+if(language == 'english')
+{
+  x.lab <- "SSB (tonnes x 1000)"
+  y.lab1 <-"Fully-recruited NM (instantaneous)"
+  y.lab2 <-"Recruit NM (instantaneous)"
+  y.lab3 <-"Recruit growth"
+  y.lab4 <-"Recruits per Spawner (kg\u00B9\u22C5kg\u207B\u00B9)"
+}
+
+if(language == 'french')
+{
+  x.lab <- "BSR (tonnes)"
+  y.lab1 <- "MN (instantanée) des pétoncles PR"
+  y.lab2 <- "MN (instantanée) des pétoncles recrutés"
+  y.lab3 <- "Croissance des pétoncles recrutés"
+  y.lab4 <- "Pétoncles recrutés par géniteur (kg\u00B9\u22C5kg\u207B\u00B9)"
+}
+
 sab.prod.sum <- data.frame(mn.gR.obs = mean(sab.prod.dat$gR,na.rm=T),mn.gR.sim = mean(sab.res.4.plts$gR),
                            med.m.obs = median(sab.prod.dat$m,na.rm=T),med.m.sim = median(sab.res.4.plts$M),
                            mn.mR.obs = mean(sab.prod.dat$mr,na.rm=T),mn.mR.sim = mean(sab.res.4.plts$MR),
                            mn.rps.obs = mean(sab.prod.dat$RPS4,na.rm=T),mn.rps.sim = mean(sab.res.4.plts$rps))
+
+
 
 
 sab.m.sim.comp.plt <- ggplot(sab.res.4.plts) + geom_point(aes(x=SSB/1000,y=M),alpha=alphs,shape=21,fill='black',stroke=NA) + 
@@ -466,19 +610,19 @@ sab.m.sim.comp.plt <- ggplot(sab.res.4.plts) + geom_point(aes(x=SSB/1000,y=M),al
                          geom_hline(yintercept = sab.prod.sum$med.m.obs,color='blue',linetype='dashed')+
                          geom_hline(yintercept = sab.prod.sum$med.m.sim,color='blue',linetype='solid')+
                          scale_x_continuous(name="",labels = NULL) +
-                         scale_y_continuous(name=("Fully-recruited NM (instantaneous)"))
+                         scale_y_continuous(name=(y.lab1))
 
 sab.mr.sim.comp.plt <- ggplot(sab.res.4.plts) + geom_point(aes(x=SSB/1000,y=MR),alpha=alphs,shape=21,fill='black',stroke=NA) +
                          geom_hline(yintercept = sab.prod.sum$mn.mR.obs,color='blue',linetype='dashed')+
                          geom_hline(yintercept = sab.prod.sum$mn.mR.sim,color='blue',linetype='solid')+
                          scale_x_continuous(name="",labels = NULL) +
-                         scale_y_continuous(name=("Recruit NM (instantaneous)"))
+                         scale_y_continuous(name=(y.lab2))
 
 sab.gr.sim.comp.plt <- ggplot(sab.res.4.plts) + geom_point(aes(x=SSB/1000,y=gR),alpha=alphs,shape=21,fill='black',stroke=NA)  +
                          geom_hline(yintercept = sab.prod.sum$mn.gR.obs,color='blue',linetype='dashed')+
                          geom_hline(yintercept = sab.prod.sum$mn.gR.sim,color='blue',linetype='solid')+
                          scale_x_continuous(name="") +
-                         scale_y_continuous(name=("Recruit growth"))
+                         scale_y_continuous(name=(y.lab3))
 
 # The really low RPS values are because of the correlation, they happen after most of the really large recruitment years, so are due to the large negative lag 2 rps, ha!
 sab.rps.sim.comp.plt <- ggplot(sab.res.4.plts) + geom_point(aes(x=SSB/1000,y=rps.offset),alpha=alphs,shape=21,fill='black',stroke=NA) + 
@@ -486,14 +630,17 @@ sab.rps.sim.comp.plt <- ggplot(sab.res.4.plts) + geom_point(aes(x=SSB/1000,y=rps
                          geom_hline(yintercept = sab.prod.sum$mn.rps.obs,color='blue',linetype='dashed')+
                          geom_hline(yintercept = sab.prod.sum$mn.rps.sim,color='blue',linetype='solid')+
                          scale_x_continuous(name="") +
-                         scale_y_log10(name=("Recruits per Spawner (kg\u00B9\u22C5kg\u207B\u00B9)"))
+                         scale_y_log10(name=(y.lab4))
 
 
 sab.sim.comps.plt <- plot_grid(sab.m.sim.comp.plt,sab.mr.sim.comp.plt,sab.rps.sim.comp.plt,sab.gr.sim.comp.plt)
-sab.sim.comps.plt2 <- add_sub(sab.sim.comps.plt, "SSB (tonnes x 1000)",angle=0,y=1.4,x=0.55,size=24)
+sab.sim.comps.plt2 <- add_sub(sab.sim.comps.plt, x.lab,angle=0,y=1.4,x=0.55,size=24)
 
 save_plot(sab.sim.comps.plt2,file = paste0(plot.sab.rp.mod.loc,min(sab.model.yrs),"-",max(sab.model.yrs),"/Sim_paramter_DD.png"),base_height = 11,base_width=8.5)
 
+
+if(language == 'english') y.lab <- 'Fully-recruited Biomass (tonnes x 1000)'
+if(language == 'french') y.lab <- "Biomasse des pétoncles pleinement \nrecrutés (milliers de tonnes)"
 
 sab.mod.rp.plt <- ggplot(sab.prod.dat) + geom_line(aes(x=Year,y=B/1000)) + 
                        geom_hline(yintercept = sab.lrp.b0/1000,color='firebrick2',linetype='solid') +
@@ -503,7 +650,7 @@ sab.mod.rp.plt <- ggplot(sab.prod.dat) + geom_line(aes(x=Year,y=B/1000)) +
                        geom_hline(yintercept = sab.usr.bmsy/1000,color=u.colors[2],linetype='dashed') +
                        geom_hline(yintercept = sab.bmsy/1000,color=u.colors[1],linetype='solid',size=1.5) +
                        scale_x_continuous('',breaks=seq(1990,2030,by=3)) +
-                       scale_y_continuous('Fully-recruited Biomass (tonnes x 1000)',limits = c(0,NA)) 
+                       scale_y_continuous(y.lab,limits = c(0,NA)) 
 
 save_plot(sab.mod.rp.plt,file = paste0(plot.sab.rp.mod.loc,min(sab.model.yrs),"-",max(sab.model.yrs),"/Sim_RPs.png"),base_height = 8.5,base_width=8.5)
 
@@ -520,7 +667,7 @@ sab.mod.real.plt <- ggplot(sab.res.4.plts) + geom_line(aes(x=year,y=B/1000,group
                        geom_hline(yintercept = sab.usr.bmsy/1000,color=u.colors[2],linetype='dashed') +
                        #geom_hline(yintercept = sab.bmsy/1000,color=u.colors[1],linetype='solid',size=1.5) +
                        scale_x_continuous('') +
-                       scale_y_continuous('Fully-recruited Biomass (tonnes x 1000)') +
+                       scale_y_continuous(y.lab) +
                        theme(legend.position = "none")
 
 save_plot(sab.mod.real.plt,file = paste0(plot.sab.rp.mod.loc,min(sab.model.yrs),"-",max(sab.model.yrs),"/Sim_reals_w_RPS.png"),base_height = 8.5,base_width=8.5)
@@ -585,3 +732,185 @@ sab.catch.quants.hcr <- quantile(sab.hcr$Catch,na.rm=T,probs = seq(0,1,by=0.01))
 sab.q <- round(median(sab.mod$sims.list$q),digits=2)
 
 ```
+
+```{r sab-french-special,include=F}
+
+# Need to make a french version of the figures that are produced in these simulations. Should have built that right into the function, oh well!
+# Need to remake a couple things...
+MSY.summarized <- sab.Exp.res %>% dplyr::group_by(F.scenario,year) %>% 
+                                   dplyr::summarise(B.mn = median(B,na.rm=T), 
+                                                    B.U90 = quantile(B,probs=0.95,na.rm=T),           
+                                                    B.U50 = quantile(B,probs=0.75,na.rm=T),
+                                                    B.L90 = quantile(B,probs=0.05,na.rm=T),           
+                                                    B.L50 = quantile(B,probs=0.25,na.rm=T),
+                                                    Rec.mn = median(Rec,na.rm=T),      
+                                                    Rec.U90 = quantile(Rec,probs=0.95,na.rm=T),       
+                                                    Rec.U50 = quantile(Rec,probs=0.75,na.rm=T),
+                                                    Rec.L90 = quantile(Rec,probs=0.05,na.rm=T),       
+                                                    Rec.L50 = quantile(Rec,probs=0.25,na.rm=T),
+                                                    Catch.mn = median(Catch,na.rm=T),  
+                                                    Catch.U90 = quantile(Catch,probs=0.95,na.rm=T),   
+                                                    Catch.U50 = quantile(Catch,probs=0.75,na.rm=T),
+                                                    Catch.L90 = quantile(Catch,probs=0.05,na.rm=T),   
+                                                    Catch.L50 = quantile(Catch,probs=0.25,na.rm=T),
+                                                    M.mn = median(M,na.rm=T),          
+                                                    M.U90 = quantile(M,probs=0.95,na.rm=T),           
+                                                    M.U50 = quantile(M,probs=0.75,na.rm=T),
+                                                    M.L90 = quantile(M,probs=0.05,na.rm=T),           
+                                                    M.L50 = quantile(M,probs=0.25,na.rm=T),
+                                                    F.mn = median(F.dec.table,na.rm=T),
+                                                    F.U90 = quantile(F.dec.table,probs=0.95,na.rm=T), 
+                                                    F.U50 = quantile(F.dec.table,probs=0.75,na.rm=T),
+                                                    F.L90 = quantile(F.dec.table,probs=0.05,na.rm=T), 
+                                                    F.L50 = quantile(F.dec.table,probs=0.25,na.rm=T),
+                                                    SP.mn = median(SP,na.rm=T),        
+                                                    SP.U90 = quantile(SP,probs=0.95,na.rm=T),         
+                                                    SP.U50 = quantile(SP,probs=0.75,na.rm=T),
+                                                    SP.L90 = quantile(SP,probs=0.05,na.rm=T),         
+                                                    SP.L50 = quantile(SP,probs=0.25,na.rm=T),
+                                                    RPS.mn = median(rps,na.rm=T),      
+                                                    RPS.U90 = quantile(rps,probs=0.95,na.rm=T),       
+                                                    RPS.U50 = quantile(rps,probs=0.75,na.rm=T),
+                                                    RPS.L90 = quantile(rps,probs=0.05,na.rm=T),       
+                                                    RPS.L50 = quantile(rps,probs=0.25,na.rm=T))
+    
+Equilib.dat <-    MSY.summarized %>% dplyr::filter(year >= n_y/2) %>% dplyr::group_by(F.scenario) %>% 
+                                         dplyr::summarise(B.mn = median(B.mn,na.rm=T),         
+                                                          B.U90 = median(B.U90,na.rm=T),        
+                                                          B.U50 = median(B.U50,na.rm=T),
+                                                          B.L90 = median(B.L90,na.rm=T),       
+                                                          B.L50 = median(B.L50,na.rm=T),
+                                                          Catch.mn = median(Catch.mn,na.rm=T), 
+                                                          Catch.U90 = median(Catch.U90,na.rm=T),
+                                                          Catch.U50 = median(Catch.U50,na.rm=T),
+                                                          Catch.L90 = median(Catch.L90,na.rm=T),
+                                                          Catch.L50 = median(Catch.L50,na.rm=T),
+                                                          Rec.mn = median(Rec.mn,na.rm=T),     
+                                                          Rec.U90 = median(Rec.U90,na.rm=T),    
+                                                          Rec.U50 = median(Rec.U50,na.rm=T),
+                                                          Rec.L90 = median(Rec.L90,na.rm=T),    
+                                                          Rec.L50 = median(Rec.L50,na.rm=T))
+    
+    
+sum.fig.alpha <- 0.2
+
+if(language == 'english')
+{ 
+  x.lab <- "Explotation Rate"
+  y.lab1 <- "Biomass (metric tonnes x 1000)"
+  y.lab2 <- "Equilibrium Biomass (metric tonnes x 1000)"
+  y.lab3 <- "Equilibrium Catch (metric tonnes)"
+  
+  }
+if(language == 'french') 
+{
+  x.lab <- "Taux d’exploitation"
+  y.lab1 <- "Biomasse (milliers de tonnes métriques)"
+  y.lab2 <- "Biomasse à l’équilibre (milliers de tonnes)"
+  y.lab3 <- "Prises à l’équilibre (tonnes métriques)"
+
+}
+
+B.ts <- ggplot(MSY.summarized,aes(x=year,y=B.mn/1000)) + geom_line() + facet_wrap(~F.scenario) +
+                                        geom_ribbon(aes(x=year,ymax = B.U90/1000,ymin=B.L90/1000),fill='grey30',alpha = sum.fig.alpha) + 
+                                        geom_ribbon(aes(x=year,ymax = B.U50/1000,ymin=B.L50/1000),fill='blue',alpha = sum.fig.alpha) +
+                                        xlab("") + ylab(y.lab1)
+save_plot(B.ts,file = paste0(plot.sab.rp.mod.loc,min(sab.model.yrs),"-",max(sab.model.yrs),"/B_mn_ts.png"),base_height=15,base_width=15)
+
+
+# Biomass equilibrium
+B.equil.plt<- ggplot(Equilib.dat,aes(x=F.scenario,y=B.mn/1000)) + geom_point()+ geom_line()+
+                              geom_ribbon(aes(x=F.scenario,ymin=B.L90/1000, ymax=B.U90/1000),alpha = sum.fig.alpha,fill='grey30',alpha = sum.fig.alpha) +
+                              geom_ribbon(aes(x=F.scenario,ymin=B.L50/1000, ymax=B.U50/1000),alpha = sum.fig.alpha,fill='blue',alpha = sum.fig.alpha) +
+                              ylab(y.lab2) + xlab(x.lab)
+save_plot(B.equil.plt,file = paste0(plot.sab.rp.mod.loc,min(sab.model.yrs),"-",max(sab.model.yrs),"/B_equilibrum.png"),base_height=8,base_width=12)
+
+# Catch Equilibrium
+C.equil.plt<-ggplot(Equilib.dat,aes(x=F.scenario,y=Catch.mn)) + geom_point()+ geom_line()+
+                                geom_ribbon(aes(x=F.scenario,ymin=Catch.L90, ymax=Catch.U90),alpha = sum.fig.alpha,fill='grey30',alpha = sum.fig.alpha) +
+                                geom_ribbon(aes(x=F.scenario,ymin=Catch.L50, ymax=Catch.U50),alpha = sum.fig.alpha,fill='blue',alpha = sum.fig.alpha) +
+                                ylab(y.lab2)  + xlab(x.lab)
+save_plot(C.equil.plt,file = paste0(plot.sab.rp.mod.loc,min(sab.model.yrs),"-",max(sab.model.yrs),"/Catch_equilibrium.png"),base_height=8,base_width=12)
+
+
+
+# Same thing for HCR figures....
+HCR.summarized <- sab.hcr %>% dplyr::group_by(year) %>% 
+                                  dplyr::summarise(B.mn = median(B,na.rm=T),         
+                                                   B.U90 = quantile(B,probs=0.95,na.rm=T),           
+                                                   B.U50 = quantile(B,probs=0.75,na.rm=T),
+                                                   B.L90 = quantile(B,probs=0.05,na.rm=T),           
+                                                   B.L50 = quantile(B,probs=0.25,na.rm=T),
+                                                   Rec.mn = median(Rec,na.rm=T),      
+                                                   Rec.U90 = quantile(Rec,probs=0.95,na.rm=T),       
+                                                   Rec.U50 = quantile(Rec,probs=0.75,na.rm=T),
+                                                   Rec.L90 = quantile(Rec,probs=0.05,na.rm=T),      
+                                                   Rec.L50 = quantile(Rec,probs=0.25,na.rm=T),
+                                                  Catch.mn = mean(Catch,na.rm=T),  
+                                                  Catch.U90 = quantile(Catch,probs=0.95,na.rm=T),   
+                                                  Catch.U50 = quantile(Catch,probs=0.75,na.rm=T),
+                                                  Catch.L90 = quantile(Catch,probs=0.05,na.rm=T),   
+                                                  Catch.L50 = quantile(Catch,probs=0.25,na.rm=T),
+                                                  M.mn = median(M,na.rm=T),          
+                                                  M.U90 = quantile(M,probs=0.95,na.rm=T),           
+                                                  M.U50 = quantile(M,probs=0.75,na.rm=T),
+                                                  M.L90 = quantile(M,probs=0.05,na.rm=T),           
+                                                  M.L50 = quantile(M,probs=0.25,na.rm=T),
+                                                  F.mn = median(F.dec.table,na.rm=T),
+                                                  F.U90 = quantile(F.dec.table,probs=0.95,na.rm=T), 
+                                                  M.U50 = quantile(F.dec.table,probs=0.75,na.rm=T),
+                                                  F.L90 = quantile(F.dec.table,probs=0.05,na.rm=T), 
+                                                  M.L50 = quantile(F.dec.table,probs=0.25,na.rm=T),
+                                                  SP.mn = median(SP,na.rm=T),        
+                                                  SP.U90 = quantile(SP,probs=0.95,na.rm=T),         
+                                                  SP.U50 = quantile(SP,probs=0.75,na.rm=T),
+                                                  SP.L90 = quantile(SP,probs=0.05,na.rm=T),         
+                                                  SP.L50 = quantile(SP,probs=0.25,na.rm=T))
+
+    # Biomass realizations     
+if(language == 'english')
+{ 
+  x.lab <- "Explotation Rate"
+  y.lab1 <- "Biomass (metric tonnes x 1000)"
+  y.lab2 <- "Predicted Catch (metric tonnes)"
+  y.lab3 <- "Catch (metric tonnes)"
+}
+if(language == 'french') 
+{
+  x.lab <- "Taux d’exploitation"
+  y.lab1 <- "Biomasse (milliers de tonnes métriques)"
+  y.lab2 <- "Prises prévues (tonnes métriques)"
+  y.lab3 <- "Prises (tonnes métriques)"
+}
+
+B.real <- ggplot(sab.hcr,aes(x=year,y=B/1000,group = Sim)) + geom_point(alpha = 1/100,shape=19,size=0.1)+ xlab("") + 
+                                                             geom_hline(yintercept = c(sab.lrp.4.bmsy/1000,sab.usr.bmsy/1000,sab.trp.bmsy/1000),
+                                                                         color=c('firebrick2',u.colors[2],u.colors[1]),linewidth = 1.5) +
+                                                             scale_y_continuous(name = y.lab1, limits = c(0,NA)) +
+                                                             theme(legend.position = 'none')
+save_plot(B.real,file = paste0(plot.sab.rp.mod.loc,min(sab.model.yrs),"-",max(sab.model.yrs),"/B_hcr_reals.png"),base_height=10,base_width=10)
+
+    # Catch realizations          
+C.real <- ggplot(sab.hcr,aes(x=year,y=Catch,group = Sim)) + geom_point(alpha = 1/100,shape=19,size=0.1)+
+                                                            ylab(y.lab2) + xlab("") + 
+                                                            theme(legend.position = 'none')
+save_plot(C.real,file = paste0(plot.sab.rp.mod.loc,min(sab.model.yrs),"-",max(sab.model.yrs),"/C_hcr_reals.png"),base_height=10,base_width=10)
+
+# Biomass time series
+B.ts <- ggplot(HCR.summarized,aes(x=year,y=B.mn/1000)) + geom_line() + 
+                                                        geom_ribbon(aes(x=year,ymax = B.U90/1000,ymin=B.L90/1000),fill='grey30',alpha = sum.fig.alpha) +
+                                                        geom_ribbon(aes(x=year,ymax = B.U50/1000,ymin=B.L50/1000),fill='blue',alpha = sum.fig.alpha) + 
+                                                        geom_hline(yintercept = c(sab.lrp.4.bmsy/1000,sab.usr.bmsy/1000,sab.trp.bmsy/1000),
+                                                                   color=c('firebrick2',u.colors[2],u.colors[1]),linewidth = 1.5) +
+                                                         scale_y_continuous(name = y.lab1, limits = c(0,NA)) +
+                                                         xlab("") 
+save_plot(B.ts,file = paste0(plot.sab.rp.mod.loc,min(sab.model.yrs),"-",max(sab.model.yrs),"/B_hcr_mn_ts.png"),base_height=10,base_width=10)
+
+# Catch time series 
+C.ts <- ggplot(HCR.summarized,aes(x=year,y=Catch.mn)) + geom_line() + 
+                                                        geom_ribbon(aes(x=year,ymax = Catch.U90,ymin=Catch.L90),fill='grey30',alpha = sum.fig.alpha) + 
+                                                        geom_ribbon(aes(x=year,ymax = Catch.U50,ymin=Catch.L50),fill='blue',alpha = sum.fig.alpha) + 
+                                                        xlab("") + ylab(y.lab3) 
+save_plot(C.ts,file = paste0(plot.sab.rp.mod.loc,min(sab.model.yrs),"-",max(sab.model.yrs),"/C_hcr_mn_ts.png"),base_height=10,base_width=10)
+```
+

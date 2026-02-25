@@ -178,7 +178,7 @@ params$bankname <- c("Sable Bank", "Browns Bank North")
 params$banknum <- 1:length(params$bank)
 
 fr <- ""
-#fr <- "_fr"
+fr <- "_fr"
 if(fr=="") language <- "english"
 if(!fr=="") language <- "french"
 # nickname <- "framework3"
